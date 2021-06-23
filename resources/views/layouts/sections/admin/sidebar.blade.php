@@ -17,6 +17,24 @@
                 </a>
             </li>
 
+            @if (auth()->user()->role != 'direktur')
+            <li class="{{setActive('konsultasi*')}}">
+                <a href="{{route('konsultasi.index')}}">
+                    <span class="pcoded-micon"><i class="feather icon-message-square"></i></span>
+                    <span class="pcoded-mtext">Konsultasi Pengajuan</span>
+                </a>
+            </li>
+            @endif
+
+            @if (auth()->user()->role == 'administrator' || auth()->user()->role == 'direktur')
+            <li class="{{setActive('laporan*')}}">
+                <a href="{{route('laporan.index')}}">
+                    <span class="pcoded-micon"><i class="feather icon-clipboard"></i></span>
+                    <span class="pcoded-mtext">Laporan</span>
+                </a>
+            </li>
+            @endif
+
             @if (auth()->user()->role == 'administrator')
             <li class="{{setActive('user*')}}">
                 <a href="{{route('users.index')}}">

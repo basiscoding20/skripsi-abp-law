@@ -25,6 +25,11 @@ Route::middleware('auth')->group(function () {
     Route::post('pengajuan/{file}/chat', [Admin\PengajuanController::class, 'chatStore']);
 
     Route::resource('pengajuan', Admin\PengajuanController::class)->except(['create','store', 'edit'])->parameters(['pengajuan' => 'file']);
+    
+    Route::resource('konsultasi', Admin\KonsultasiController::class)->except(['create','store', 'edit', 'update', 'destroy'])->parameters(['konsultasi' => 'file']);
+
+    Route::get('laporan', [Admin\LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('laporan/export', [Admin\LaporanController::class, 'export'])->name('laporan.export');
 
     Route::resource('users', Admin\UserController::class)->except(['show']);
 

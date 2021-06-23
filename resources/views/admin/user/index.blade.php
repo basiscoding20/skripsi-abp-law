@@ -58,7 +58,7 @@
                                     </th>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
-                                    <td>{{ $user->role }}</td>
+                                    <td class="text-capitalize">{{ $user->role }}</td>
                                     <td class="text-center">
                                         <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary p-2" data-toggle="tooltip" data-original-title="Edit Users">
                                             <span class="icofont icofont-ui-edit"></span>

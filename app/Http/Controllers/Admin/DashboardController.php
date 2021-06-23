@@ -15,16 +15,60 @@ class DashboardController extends Controller
 
             $totalPerdata = File::whereHas('category', function($category){
                 $category->where('name', 'perdata');
+            })->when(request()->search, function($laporan) {
+                $laporan->where('no_pengajuan', 'like', '%'. request()->search . '%');
+            })->when(request()->status, function($status) {
+                $status->where('status', request()->status);
             })->count();
 
             $totalPidana = File::whereHas('category', function($category){
                 $category->where('name', 'pidana');
+            })->when(request()->search, function($laporan) {
+                $laporan->where('no_pengajuan', 'like', '%'. request()->search . '%');
+            })->when(request()->status, function($status) {
+                $status->where('status', request()->status);
             })->count();
 
-            $total = File::all()->count();
+            $total = File::when(request()->search, function($laporan) {
+                $laporan->where('no_pengajuan', 'like', '%'. request()->search . '%');
+            })->when(request()->status, function($status) {
+                $status->where('status', request()->status);
+            })->count();
 
             $laporanKasus = File::latest()->when(request()->search, function($laporan) {
                 $laporan->where('no_pengajuan', 'like', '%'. request()->search . '%');
+            })->when(request()->status, function($status) {
+                $status->where('status', request()->status);
+            })->take(10)->get();
+
+        }elseif (auth()->user()->role == 'direktur') {
+
+            $totalPerdata = File::where('status', '!=', 0)->whereHas('category', function($category){
+                $category->where('name', 'perdata');
+            })->when(request()->search, function($laporan) {
+                $laporan->where('no_pengajuan', 'like', '%'. request()->search . '%');
+            })->when(request()->status, function($status) {
+                $status->where('status', request()->status);
+            })->count();
+
+            $totalPidana = File::where('status', '!=', 0)->whereHas('category', function($category){
+                $category->where('name', 'pidana');
+            })->when(request()->search, function($laporan) {
+                $laporan->where('no_pengajuan', 'like', '%'. request()->search . '%');
+            })->when(request()->status, function($status) {
+                $status->where('status', request()->status);
+            })->count();
+
+            $total = File::where('status', '!=', 0)->when(request()->search, function($laporan) {
+                $laporan->where('no_pengajuan', 'like', '%'. request()->search . '%');
+            })->when(request()->status, function($status) {
+                $status->where('status', request()->status);
+            })->count();
+
+            $laporanKasus = File::where('status', '!=', 0)->latest()->when(request()->search, function($laporan) {
+                $laporan->where('no_pengajuan', 'like', '%'. request()->search . '%');
+            })->when(request()->status, function($status) {
+                $status->where('status', request()->status);
             })->take(10)->get();
 
         }elseif (auth()->user()->role == 'perdata') {
@@ -35,12 +79,18 @@ class DashboardController extends Controller
 
             $total = File::where('user_id', auth()->id())->whereHas('category', function($category){
                 $category->where('name', 'perdata');
+            })->when(request()->search, function($laporan) {
+                $laporan->where('no_pengajuan', 'like', '%'. request()->search . '%');
+            })->when(request()->status, function($status) {
+                $status->where('status', request()->status);
             })->count();
 
             $laporanKasus = File::whereHas('category', function($category){
                 $category->where('name', 'perdata');
             })->latest()->when(request()->search, function($laporan) {
                 $laporan->where('no_pengajuan', 'like', '%'. request()->search . '%');
+            })->when(request()->status, function($status) {
+                $status->where('status', request()->status);
             })->take(10)->get();
 
         }elseif(auth()->user()->role == 'pidana'){
@@ -51,27 +101,47 @@ class DashboardController extends Controller
 
             $total = File::where('user_id', auth()->id())->whereHas('category', function($category){
                 $category->where('name', 'pidana');
+            })->when(request()->search, function($laporan) {
+                $laporan->where('no_pengajuan', 'like', '%'. request()->search . '%');
+            })->when(request()->status, function($status) {
+                $status->where('status', request()->status);
             })->count();
 
             $laporanKasus = File::whereHas('category', function($category){
                 $category->where('name', 'pidana');
             })->latest()->when(request()->search, function($laporan) {
                 $laporan->where('no_pengajuan', 'like', '%'. request()->search . '%');
+            })->when(request()->status, function($status) {
+                $status->where('status', request()->status);
             })->take(10)->get();
             
         }else{
             $totalPerdata = File::where('user_id', auth()->id())->whereHas('category', function($category){
                 $category->where('name', 'perdata');
+            })->when(request()->search, function($laporan) {
+                $laporan->where('no_pengajuan', 'like', '%'. request()->search . '%');
+            })->when(request()->status, function($status) {
+                $status->where('status', request()->status);
             })->count();
 
             $totalPidana = File::where('user_id', auth()->id())->whereHas('category', function($category){
                 $category->where('name', 'pidana');
+            })->when(request()->search, function($laporan) {
+                $laporan->where('no_pengajuan', 'like', '%'. request()->search . '%');
+            })->when(request()->status, function($status) {
+                $status->where('status', request()->status);
             })->count();
 
-            $total = File::where('user_id', auth()->id())->count();
+            $total = File::where('user_id', auth()->id())->when(request()->search, function($laporan) {
+                $laporan->where('no_pengajuan', 'like', '%'. request()->search . '%');
+            })->when(request()->status, function($status) {
+                $status->where('status', request()->status);
+            })->count();
 
             $laporanKasus = File::where('user_id', auth()->id())->when(request()->search, function($laporan) {
                 $laporan->where('no_pengajuan', 'like', '%'. request()->search . '%');
+            })->when(request()->status, function($status) {
+                $status->where('status', request()->status);
             })->latest()->take(10)->get(); 
         }
         return view('admin.dashboard', compact('laporanKasus', 'totalPerdata', 'totalPidana', 'total'));

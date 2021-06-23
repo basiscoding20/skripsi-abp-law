@@ -11,7 +11,7 @@
 
             <div class="row">
                 
-                @if (auth()->user()->role == 'administrator' || auth()->user()->role == 'user')
+                @if (auth()->user()->role == 'administrator' || auth()->user()->role == 'direktur' || auth()->user()->role == 'user')
                 <div class="col-md-4 col-12">
                     <div class="card">
                         <div class="card-block">
@@ -109,11 +109,19 @@
                         {{-- @if (auth()->user()->role != 'user') --}}
                             <div class="row">
                                 <div class="col"></div>
-                                <div class="col-md-4 float-right">
+                                <div class="col-md-8 float-right">
                                     {!! Form::open(['route' => 'dashboard', 'method' => 'get']) !!}
-                                    <div class="input-group input-group-default">
-                                        {!! Form::search('search', request('search'), ['class' => 'form-control', 'placeholder' => 'Search']) !!}
-                                        {!! Form::button('<i class="icofont icofont-search"></i>', ['class' => 'btn btn-default input-group-addon', 'type' => 'submit', 'style' => 'padding: .5rem .75rem;']) !!}
+                                    <div class="form-group row">
+                                        <div class="col"></div>
+                                        <div class="col-md-4 float-right">
+                                            {!! Form::select('status', ['' => '-- Search Status --', 1 => 'Disetujui', 2 => 'Ditolak'], request('status'), ['class' => 'form-control']) !!}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {!! Form::search('search', request('search'), ['class' => 'form-control', 'placeholder' => 'Search']) !!}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {!! Form::button('<i class="icofont icofont-search"></i>', ['class' => 'btn btn-default input-group-addon', 'type' => 'submit', 'style' => 'padding: .5rem .75rem;']) !!}
+                                        </div>
                                     </div>
                                 {!! Form::close() !!}
                                 </div>

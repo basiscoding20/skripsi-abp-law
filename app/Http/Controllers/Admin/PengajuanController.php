@@ -17,6 +17,16 @@ class PengajuanController extends Controller
 
             $laporanKasus = File::latest()->when(request()->search, function($laporan) {
                 $laporan->where('no_pengajuan', 'like', '%'. request()->search . '%');
+            })->when(request()->status, function($status) {
+                $status->where('status', request()->status);
+            })->paginate(env('PAGINATION') ?? 10);
+
+        }elseif (auth()->user()->role == 'direktur') {
+
+            $laporanKasus = File::where('status', '!=', 0)->latest()->when(request()->search, function($laporan) {
+                $laporan->where('no_pengajuan', 'like', '%'. request()->search . '%');
+            })->when(request()->status, function($status) {
+                $status->where('status', request()->status);
             })->paginate(env('PAGINATION') ?? 10);
 
         }elseif (auth()->user()->role == 'perdata') {
@@ -25,6 +35,8 @@ class PengajuanController extends Controller
                 $category->where('name', 'perdata');
             })->latest()->when(request()->search, function($laporan) {
                 $laporan->where('no_pengajuan', 'like', '%'. request()->search . '%');
+            })->when(request()->status, function($status) {
+                $status->where('status', request()->status);
             })->paginate(env('PAGINATION') ?? 10);
 
         }elseif(auth()->user()->role == 'pidana'){
@@ -33,12 +45,16 @@ class PengajuanController extends Controller
                 $category->where('name', 'pidana');
             })->latest()->when(request()->search, function($laporan) {
                 $laporan->where('no_pengajuan', 'like', '%'. request()->search . '%');
+            })->when(request()->status, function($status) {
+                $status->where('status', request()->status);
             })->paginate(env('PAGINATION') ?? 10);
 
         }else{
 
             $laporanKasus = File::where('user_id', auth()->id())->when(request()->search, function($laporan) {
                 $laporan->where('no_pengajuan', 'like', '%'. request()->search . '%');
+            })->when(request()->status, function($status) {
+                $status->where('status', request()->status);
             })->latest()->paginate(env('PAGINATION') ?? 10); 
         }
         return view('admin.pengajuan.index', compact('laporanKasus'));
@@ -138,9 +154,6 @@ class PengajuanController extends Controller
                 'is_admin' => auth()->user()->role != 'user' ? true : false,
             ]);
     
-            // Notification::create([
-            //     'chat_id' => $chat->id
-            // ]);
     
             return response()->json(['success' => true, 'message' => 'Terkirim.'], 200);
         });
@@ -161,4 +174,5 @@ class PengajuanController extends Controller
 
         return response()->json(['status' => 'success', 'message' => 'Berhasil di hapus!']);
     }
+
 }

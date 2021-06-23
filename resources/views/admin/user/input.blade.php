@@ -22,9 +22,9 @@
     {!! Form::label('role', 'Role', ['class' => 'col-sm-2 col-form-label']) !!}
     <div class="col-sm-10">
         @php
-            $role = ['' => '-- Pilih --','administrator' => 'administrator', 'pidana' => 'pidana', 'perdata' => 'perdata', 'user' => 'user'];
+            $role = ['' => '-- Pilih --','administrator' => 'Administrator', 'direktur' => 'Direktur', 'pidana' => 'Pidana', 'perdata' => 'Perdata', 'user' => 'User'];
         @endphp
-        {!! Form::select('role', $role, null ,['class' => 'form-control']) !!}
+        {!! Form::select('role', $role, null ,['class' => 'form-control text-capitalize']) !!}
     </div>
     @error('role')  
     <span class = "messages col-10 offset-2"><p class="text-danger error">{{ $message }}</p></span>

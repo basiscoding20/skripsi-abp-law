@@ -114,6 +114,7 @@
                                 <i class="feather icon-chevron-left"></i> Chat Admin
                             </a>
                         </div>
+                        @if ($file->status == 0)
                         <div class="p-b-20">
                             <div class="right-icon-control">
                                 <input type="text" name="chat" class="form-control search-text" placeholder="Enter your chat">
@@ -122,6 +123,7 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
                         <div class="msg_card_body">
                             {{-- chat ajax --}}
                         </div>

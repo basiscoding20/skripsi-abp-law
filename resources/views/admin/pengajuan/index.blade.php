@@ -28,11 +28,19 @@
                     {{-- @if (auth()->user()->role != 'user') --}}
                         <div class="row">
                             <div class="col"></div>
-                            <div class="col-md-4 float-right">
-                                {!! Form::open(['route' => 'dashboard', 'method' => 'get']) !!}
-                                <div class="input-group input-group-default">
-                                    {!! Form::search('search', request('search'), ['class' => 'form-control', 'placeholder' => 'Search']) !!}
-                                    {!! Form::button('<i class="icofont icofont-search"></i>', ['class' => 'btn btn-default input-group-addon', 'type' => 'submit', 'style' => 'padding: .5rem .75rem;']) !!}
+                            <div class="col-md-8 float-right">
+                                {!! Form::open(['route' => 'pengajuan.index', 'method' => 'get']) !!}
+                                <div class="form-group row">
+                                    <div class="col"></div>
+                                    <div class="col-md-4 float-right">
+                                        {!! Form::select('status', ['' => '-- Search Status --', 1 => 'Disetujui', 2 => 'Ditolak'], request('status'), ['class' => 'form-control']) !!}
+                                    </div>
+                                    <div class="col-md-4">
+                                        {!! Form::search('search', request('search'), ['class' => 'form-control', 'placeholder' => 'Search']) !!}
+                                    </div>
+                                    <div class="col-md-1">
+                                        {!! Form::button('<i class="icofont icofont-search"></i>', ['class' => 'btn btn-default input-group-addon', 'type' => 'submit', 'style' => 'padding: .5rem .75rem;']) !!}
+                                    </div>
                                 </div>
                             {!! Form::close() !!}
                             </div>
@@ -53,7 +61,9 @@
                                     @if (auth()->user()->role != 'user')
                                     <th>User</th>   
                                     @endif
-                                    <th>Action</th>
+                                    @if (auth()->user()->role != 'direktur')
+                                        <th>Action</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -90,6 +100,7 @@
                                     @if (auth()->user()->role != 'user')
                                     <td>{{ $laporan->user->name }}</td>   
                                     @endif
+                                    @if (auth()->user()->role != 'direktur')
                                     <td class="text-center">
                                         @if (auth()->user()->role == 'user' && $laporan->status == 1)
                                         <span id="smallButton" data-toggle="modal" data-target="#smallModal" data-attr="{{ route('pengajuan.update', $laporan->id) }}" data-value="{{ $laporan->tgl_sidang }}">
@@ -109,10 +120,11 @@
                                         </a>
                                         @endif
                                     </td>
+                                    @endif
                                 </tr>
                                 @empty
                                 <tr>
-                                    @if (auth()->user()->role != 'user')
+                                    @if (auth()->user()->role != 'user'  || auth()->user()->role != 'direktur')
                                     <td class="text-center" colspan="10">Belum ada data</td>
                                     @else
                                     <td class="text-center" colspan="9">Belum ada data</td>
